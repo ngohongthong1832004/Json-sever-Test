@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
-
+import { useState,useEffect } from 'react';
 function App() {
+  
+  const [api,setApi] = useState([])
+
+  const apiHTTP = "http://localhost:3333/"
+
+  useEffect(()=>{
+    fetch(`${apiHTTP}posts`)
+    .then((response) => response.json())
+    .then((data) => setApi(data));
+  },[])
+
+
+  console.log(api)
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> 
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>LEARN JSONsever</h1>
+      <ul>
+        {api.map( item => <h4 key={item.id}> {item.title}</h4>)}
+      </ul>
+      <button style={{margin : '5px'}}>ADD Data</button>
+      <button style={{margin : '5px'}}>UPGRADE Data</button>
+      <button style={{margin : '5px'}}>DELETE Data</button>
     </div>
   );
 }
