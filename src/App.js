@@ -3,7 +3,7 @@ import { useState } from 'react';
 function App() {
   
   const [api,setApi] = useState([])
-
+  const [render, setRender] = useState()
   const apiHTTP = "http://localhost:3333/"
 
 
@@ -20,10 +20,20 @@ function App() {
   const  handleADD = ()=>{
     console.log("handleADD")
   }
-  const    handleUPGRADE = ()=>{
-    console.log("handleUPGRADE")
+  const handleDELETE = (id) => {
+    fetch(`${apiHTTP}posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+        'Accept': 'application/json',
+    },
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    setRender(Math.random())
+    console.log(api)
+    console.log("handleDELETE")
   }
-  const    handleDELETE = ()=>{
+  const   handleUPGRADE = ()=>{
     console.log("handleDELETE")
   }
 
@@ -37,8 +47,8 @@ function App() {
   
         {api.map( item => <div key={item.id}>
           <h4> {item.title}</h4>
-          <button style={{margin : '5px'}}  onClick = {handleUPGRADE}>UPGRADE Data</button>
-          <button style={{margin : '5px'}}  onClick = {handleDELETE}>DELETE Data</button>
+          <button style={{margin : '5px'}}  onClick = {() => handleUPGRADE(item.id)}>UPGRADE Data</button>
+          <button style={{margin : '5px'}}  onClick = {() => handleDELETE(item.id)}>DELETE Data</button>
         </div>)}
       </ul>
     </div>
