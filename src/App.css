@@ -41,3 +41,7 @@ ul div{
   justify-content: center;
   align-items: center;
 }
+ul{
+  display: inline-flex;
+  flex-direction: column-reverse;
+}
