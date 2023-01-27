@@ -4,7 +4,7 @@
 
 ul div{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   list-style: none;
 }
@@ -20,4 +20,7 @@ ul button{
 }
 ul button:hover{
   opacity: 0.8;
+}
+h4{
+  margin: 5px 30px;
 }
