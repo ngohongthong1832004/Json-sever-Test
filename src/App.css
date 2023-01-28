@@ -1,8 +1,14 @@
+html{
+  background-color: rgba(99, 99, 99,0.3);
+}
+::-webkit-scrollbar{
+  display: none;
+}
 .App {
   text-align: center;
 }
 
-ul div{
+ul li{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,6 +22,7 @@ ul button{
   border: 1px solid black;
   border-radius: 3px;
   padding: 5px;
+  color: white;
   
 }
 ul button:hover{

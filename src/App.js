@@ -1,5 +1,5 @@
 import './App.css';
-import { useState,useEffect ,useRef, useLayoutEffect } from 'react';
+import { useState, useEffect ,useRef } from 'react';
 function App() {
   const [api,setApi] = useState([])
   const [apiHTTP , setApiHTTP] = useState('http://localhost:3333/posts?_page=1')
@@ -10,15 +10,29 @@ function App() {
   const [isButtonUpgrade , setIsButtonUpgrade] = useState(false)
 
   const [paginationLink , setPaginationLink] = useState([])
+  const [showPage , setShowPage] = useState(true)
 
   const upgradeInput = useRef()
+  const ulRef = useRef()
 
   var rootLink = "http://localhost:3333/posts"
 
 
+  const inputRef = useRef()
+  const inputSearchValueRef = useRef()
+  // const handleFetch = () =>{
+      
+  // }
+  const form = {
+    title : inputRef.current?.value,
+  }
+  const formUpgrade = {
+    title : valueUpgrade,
+  }
+  // console.log(inputRef.value)
   // valueUpgrade
 
-  useLayoutEffect(()=>{ 
+  useEffect(()=>{ 
     fetchAPI()
   },[apiHTTP])
 
@@ -33,23 +47,19 @@ function App() {
 
   useEffect(()=>{
     fetch(apiHTTP)
-      .then((response) => [...response.headers] )
-      .then (data => (data[3][1]?.split(',')))
-      .then(arr => setPaginationLink(arr))
+      .then((response) => {
+        const rs = [...response.headers].filter((item)=>{
+            return item[0] === "link"
+        })
+       return rs[0][1].split(',')
+      })
+      .then(arr => {
+        return setPaginationLink(arr)
+      })
   },[apiHTTP])
   
-  const inputRef = useRef()
-  const inputSearchValueRef = useRef()
-  // const handleFetch = () =>{
-      
-  // }
-  const form = {
-    title : inputRef.current?.value
-  }
-  const formUpgrade = {
-    title : valueUpgrade
-  }
-  // console.log(inputRef.value)
+  
+
   const  handleADD = ()=>{
     fetch(rootLink , {
       method: 'POST',
@@ -60,12 +70,17 @@ function App() {
       })
       setInputValue('')
       inputRef.current.focus()
-      setApiHTTP(apiHTTP)
+
+      fetchAPI()
+
       // setTimeout(()=>{  
       //     fetchAPI()
       // },100)
   }
   const handleDELETE = (id) => {
+    const test = document.getElementById(id)
+    test.style.display = 'none'
+
     fetch(`${rootLink}/${id}`, {
     method: 'DELETE',
     headers: {
@@ -85,7 +100,9 @@ function App() {
     })
       .then(res => res.json())
       .then(data => console.log(data))
-      setApiHTTP(apiHTTP)
+
+      fetchAPI()
+
       setValueUpgrade("")
 
     console.log("handleUPGRADE")
@@ -114,14 +131,15 @@ function App() {
   }
   // console.log(formUpgrade)
   // console.log(idUpgrade)
-  console.log("apiHTTP : ",apiHTTP)
+  // console.log("apiHTTP : ",apiHTTP)
+  // console.log(paginationLink)
 //  const arr  =  paginationLink.map((e)=>{
 //     return e.trim()?.split(";")[0]?.split("<")[1]?.split(">")[0]
 //   })
 //   console.log("arr : ",arr)
   return (
     <div className="App">
-      <h1>LEARN JSONsever</h1>
+      <h1>TODO FAKE APP</h1>
 
         <label>Job name </label>
         <input ref = {inputRef} value={inputValue} onChange = { e => setInputValue(e.target.value)} />
@@ -134,26 +152,26 @@ function App() {
         <div style={{padding : "10px"}}>-----------------------------</div>
 
         { isButtonUpgrade && <div>
-          <label> Upgrade value </label>
+          <label> Edit value </label>
           <input value={valueUpgrade} onChange = { e => setValueUpgrade(e.target.value)} />
-          <button ref = {upgradeInput} style={{margin : '5px'}}  onClick = {handleUPGRADE}>Upgrade</button>
+          <button ref = {upgradeInput} style={{margin : '5px'}}  onClick = {handleUPGRADE}>Edit</button>
+          <div style={{padding : "10px"}}>-----------------------------</div>
         </div>}
-        <div style={{padding : "10px"}}>-----------------------------</div>
         
 
-      <ul>
+      <ul  ref = {ulRef}>
         {/* <button style={{margin : '5px'}}  onClick = {handleFetch}>Fetch Data</button> */}
-        {api.map( (item, index) => <div key={item.id}>
+        {api.map( item => <li key={item.id} id = {item.id}>
           <span style={{color :"blue",padding : "10px"}}>{item.id}</span>
           <h4>{item.title}</h4>
           <div>
-            <button style={{margin : '5px',backgroundColor : "green"}}  onClick = {()=> { handleClickUpgrade(item) ; setIsButtonUpgrade(true)}}>UPGRADE</button>
+            <button style={{margin : '5px',backgroundColor : "green"}}  onClick = {()=> { handleClickUpgrade(item) ; setIsButtonUpgrade(true)}}>EDIT</button>
             <button style={{margin : '5px',backgroundColor : "red"}}  onClick = {() => handleDELETE(item.id)}>DELETE</button>
           </div>
           {/* <button style={{margin : '5px',backgroundColor : "aqua"}}  onClick = {() => handleComplete(item.id)}>Complete</button> */}
-        </div>)}
+        </li>)}
       </ul>
-          <div style = {{display : "flex" , alignItems :"center" , justifyContent : "space-evenly" , padding : "30px 50px"}}>
+          {showPage && <div style = {{display : "flex" , alignItems :"center" , justifyContent : "space-evenly" , padding : "30px 50px"}}>
             {paginationLink.map((item,index)=>{
               return <button 
                         onClick = {() => handleClickPagination(item)} key={index}
@@ -162,7 +180,7 @@ function App() {
                         {item?.split(';')[1]?.split('=')[1].slice(1,item?.split(';')[1]?.split('=')[1].length -1).toUpperCase()}
                       </button>
             })}
-          </div>
+          </div>}
     </div>
   );
 }
