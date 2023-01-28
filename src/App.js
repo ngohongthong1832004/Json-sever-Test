@@ -20,17 +20,14 @@ function App() {
 
   const inputRef = useRef()
   const inputSearchValueRef = useRef()
-  // const handleFetch = () =>{
-      
-  // }
+ 
   const form = {
     title : inputRef.current?.value,
   }
   const formUpgrade = {
     title : valueUpgrade,
   }
-  // console.log(inputRef.value)
-  // valueUpgrade
+
 
   useEffect(()=>{ 
     fetchAPI()
@@ -72,10 +69,7 @@ function App() {
       inputRef.current.focus()
 
       fetchAPI()
-
-      // setTimeout(()=>{  
-      //     fetchAPI()
-      // },100)
+      window.location.reload(false);
   }
   const handleDELETE = (id) => {
     const test = document.getElementById(id)
@@ -92,7 +86,7 @@ function App() {
   
   const   handleUPGRADE = ()=>{
     fetch(`${rootLink}/${idUpgrade}`, {
-      method: 'PUT', // or 'PUT'
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -103,7 +97,10 @@ function App() {
 
       fetchAPI()
 
+      setIsButtonUpgrade(false)
       setValueUpgrade("")
+      
+      window.location.reload(false);
 
     console.log("handleUPGRADE")
   }
@@ -112,34 +109,25 @@ function App() {
     .then(res => res.json())
     .then(data => setApi(data))
     setInputSearchValue('')
-    upgradeInput.current.focus()
-    // inputSearchValueRef.focus()
+    setShowPage(false)
   }
-  // const handleComplete = () => {
-  //   console.log("")
-  // }
+  
   const handleClickUpgrade =  (item) => { 
     setValueUpgrade(item.title) 
     setIdUpgrade(item.id)
   }
 
   const handleClickPagination = function(link){
-    // console.log("LInk : ",link)
     const result  = link.trim()?.split(";")[0]?.split("<")[1]?.split(">")[0]
     console.log(result)
     setApiHTTP(result)
   }
-  // console.log(formUpgrade)
-  // console.log(idUpgrade)
-  // console.log("apiHTTP : ",apiHTTP)
-  // console.log(paginationLink)
-//  const arr  =  paginationLink.map((e)=>{
-//     return e.trim()?.split(";")[0]?.split("<")[1]?.split(">")[0]
-//   })
-//   console.log("arr : ",arr)
+ 
+  console.log(apiHTTP)
+
   return (
     <div className="App">
-      <h1>TODO FAKE APP</h1>
+      <h1>FAKE TODO APP ( Super CuIf )</h1>
 
         <label>Job name </label>
         <input ref = {inputRef} value={inputValue} onChange = { e => setInputValue(e.target.value)} />
@@ -163,16 +151,19 @@ function App() {
         {/* <button style={{margin : '5px'}}  onClick = {handleFetch}>Fetch Data</button> */}
         {api.map( item => <li key={item.id} id = {item.id}>
           <span style={{color :"blue",padding : "10px"}}>{item.id}</span>
-          <h4>{item.title}</h4>
+          <div style={{display : "flex" , flex : 1}}>
+            <h4>{item.title}</h4>
+          </div>
           <div>
             <button style={{margin : '5px',backgroundColor : "green"}}  onClick = {()=> { handleClickUpgrade(item) ; setIsButtonUpgrade(true)}}>EDIT</button>
             <button style={{margin : '5px',backgroundColor : "red"}}  onClick = {() => handleDELETE(item.id)}>DELETE</button>
           </div>
           {/* <button style={{margin : '5px',backgroundColor : "aqua"}}  onClick = {() => handleComplete(item.id)}>Complete</button> */}
         </li>)}
+        { !showPage &&   <button style={{color : "black"}} onClick = {() => {setApiHTTP(`http://localhost:3333/posts?_page=1`) ; setShowPage(true) }}>Back to list</button>}
       </ul>
           {showPage && <div style = {{display : "flex" , alignItems :"center" , justifyContent : "space-evenly" , padding : "30px 50px"}}>
-            {paginationLink.map((item,index)=>{
+            {paginationLink[0] !== "" && paginationLink.map((item,index)=>{
               return <button 
                         onClick = {() => handleClickPagination(item)} key={index}
                         style = {{border : "1px solid black" , padding : "10px 25px" , fontSize : "25px" , listStyle : "none"}}
@@ -181,6 +172,7 @@ function App() {
                       </button>
             })}
           </div>}
+         
     </div>
   );
 }
