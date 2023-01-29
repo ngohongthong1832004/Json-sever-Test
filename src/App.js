@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect ,useRef } from 'react';
 function App() {
   const [api,setApi] = useState([])
-  const [apiHTTP , setApiHTTP] = useState('http://localhost:3333/posts?_page=1')
+  const [apiHTTP , setApiHTTP] = useState('http://json-server-in.vercel.app/posts?_page=1')
   const [inputValue, setInputValue] = useState('')
   const [inputSearchValue, setInputSearchValue] = useState('')
   const [valueUpgrade, setValueUpgrade] = useState('')
@@ -15,7 +15,7 @@ function App() {
   const upgradeInput = useRef()
   const ulRef = useRef()
 
-  var rootLink = "http://localhost:3333/posts"
+  var rootLink = "http://json-server-in.vercel.app/posts"
 
 
   const inputRef = useRef()
@@ -167,7 +167,7 @@ function App() {
           </div>
           {/* <button style={{margin : '5px',backgroundColor : "aqua"}}  onClick = {() => handleComplete(item.id)}>Complete</button> */}
         </li>)}
-        { !showPage &&   <button style={{color : "black"}} onClick = {() => {setApiHTTP(`http://localhost:3333/posts?_page=1`) ; setShowPage(true) }}>Back to list</button>}
+        { !showPage &&   <button style={{color : "black"}} onClick = {() => {setApiHTTP(`http://json-server-in.vercel.app/posts?_page=1`) ; setShowPage(true) }}>Back to list</button>}
       </ul>
           {showPage && <div style = {{display : "flex" , alignItems :"center" , justifyContent : "space-evenly" , padding : "30px 50px"}}>
             {paginationLink[0] !== "" && paginationLink.map((item,index)=>{
