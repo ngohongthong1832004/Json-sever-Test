@@ -35,7 +35,9 @@ function App() {
 
   const fetchAPI = ()=>{
     console.log("call API")
-    fetch(apiHTTP)
+    fetch(apiHTTP,{
+      method: 'GET'
+    })
       .then((response) => response.json())
       .then((data) =>{ 
         setApi(data)
@@ -69,6 +71,7 @@ function App() {
       inputRef.current.focus()
 
       fetchAPI()
+
       window.location.reload(false);
   }
   const handleDELETE = (id) => {
@@ -97,7 +100,10 @@ function App() {
 
       fetchAPI()
 
+
+
       setIsButtonUpgrade(false)
+
       setValueUpgrade("")
       
       window.location.reload(false);
@@ -143,6 +149,7 @@ function App() {
           <label> Edit value </label>
           <input value={valueUpgrade} onChange = { e => setValueUpgrade(e.target.value)} />
           <button ref = {upgradeInput} style={{margin : '5px'}}  onClick = {handleUPGRADE}>Edit</button>
+          <button ref = {upgradeInput} style={{margin : '5px'}}  onClick = {() => setIsButtonUpgrade(false) }>Cancel</button>
           <div style={{padding : "10px"}}>-----------------------------</div>
         </div>}
         
